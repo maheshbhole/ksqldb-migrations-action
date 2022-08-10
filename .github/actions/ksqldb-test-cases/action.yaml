@@ -1,3 +1,21 @@
+# name: ksqlDB Testcases
+# description: validate ksqlDB testcases with GitHub actions
+# inputs:
+#   config:
+#     description: Path to config file
+#     default: /github/workspace
+# runs:
+#   using: docker
+#   image: docker://confluentinc/ksqldb-cli:0.24.0
+#   args:
+#     - ksql-test-runner
+#     - -i
+#     - ${{ inputs.config }}/test/input.json
+#     - -s
+#     - ${{ inputs.config }}/src/statements.sql
+#     - -o
+#     - ${{ inputs.config }}/test/output.json
+
 name: ksqlDB Testcases
 description: validate ksqlDB testcases with GitHub actions
 inputs:
@@ -5,13 +23,7 @@ inputs:
     description: Path to config file
     default: /github/workspace
 runs:
-  using: docker
-  image: docker://confluentinc/ksqldb-cli:0.24.0
-  args:
-    - ksql-test-runner
-    - -i
-    - ${{ inputs.config }}/test/input.json
-    - -s
-    - ${{ inputs.config }}/src/statements.sql
-    - -o
-    - ${{ inputs.config }}/test/output.json
+  using: composite
+  steps:
+    - run: docker exec ksqldb-cli ksql-test-runner -i ${{ inputs.config }}/test/input.json -s ${{ inputs.config }}/src/statements.sql -o ${{ inputs.config }}/test/output.json
+      shell: bash
