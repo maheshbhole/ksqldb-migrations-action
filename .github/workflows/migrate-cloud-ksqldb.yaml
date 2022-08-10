@@ -17,7 +17,8 @@ jobs:
       options: --cpus 1
     steps:
       - name: Check for dockerenv file
-        run: ksql-test-runner -i /opt/app/test/input.json -s /opt/app/src/statements.sql -o /opt/app/test/output.json
+        run: ls -R
+        #run: ksql-test-runner -i /opt/app/test/input.json -s /opt/app/src/statements.sql -o /opt/app/test/output.json
         #run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
 
   # build:
