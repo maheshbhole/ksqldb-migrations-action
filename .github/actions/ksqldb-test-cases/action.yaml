@@ -6,7 +6,7 @@ inputs:
     default: /github/workspace
 runs:
   using: docker
-  image: docker://confluentinc/ksqldb-cli:0.17.0
+  image: docker://confluentinc/ksqldb-cli:0.24.0
   args:
     - ksql-test-runner
     - -i
