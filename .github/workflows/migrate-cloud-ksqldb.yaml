@@ -2,6 +2,22 @@ on:
   push:
     branches: [main]
 jobs:
+  testcases:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: franzbischoff/replace_envs@v1
+        env:
+          CONFLUENT_KSQLDB_ENDPOINT: 'https://pksqlc-jzzqw.westeurope.azure.confluent.cloud:443'
+          CONFLUENT_KSQLDB_API_KEY: 'O3B4JABWUZWJ3CXC'
+          CONFLUENT_KSQLDB_API_SECRET: 'ABWo8ulbxTXKyL0Pq/J6u/552v9SmeTZpnAoBLoMhTktRBWzqGEfVEmJhlydepP2'
+        #with:
+        #  from_file: 'ksql-migrations.properties'
+        #  to_file: 'ksql-migrations.properties'
+        #  commit: 'false'
+      - uses: ./.github/actions/ksqldb-test-cases
+      #- uses: ./.github/actions/ksqldb-migrations-validate
+      #- uses: ./.github/actions/ksqldb-migrations-apply
   # container-test-job:
   #   runs-on: ubuntu-latest
   #   container:
@@ -22,6 +38,7 @@ jobs:
   #       #run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
 
   build:
+    needs: testcases
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,6 +51,6 @@ jobs:
           from_file: 'ksql-migrations.properties'
           to_file: 'ksql-migrations.properties'
           commit: 'false'
-      - uses: ./.github/actions/ksqldb-test-cases
-      #- uses: ./.github/actions/ksqldb-migrations-validate
+      #- uses: ./.github/actions/ksqldb-test-cases
+      - uses: ./.github/actions/ksqldb-migrations-validate
       #- uses: ./.github/actions/ksqldb-migrations-apply
