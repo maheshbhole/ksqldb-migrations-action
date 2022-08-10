@@ -2,37 +2,38 @@ on:
   push:
     branches: [main]
 jobs:
-  container-test-job:
-    runs-on: ubuntu-latest
-    container:
-      image: confluentinc/ksqldb-cli:0.24.0
-      env:
-        KSQL_CONFIG_DIR: "/etc/ksqldb"
-        entrypoint: /bin/sh
-      ports:
-        - 80
-      volumes:
-        - /github/workspace/src:/opt/app/src
-        - /github/workspace/test:/opt/app/test
-      options: --cpus 1
-    steps:
-      - name: Check for dockerenv file
-        run: ls -R
-        #run: ksql-test-runner -i /opt/app/test/input.json -s /opt/app/src/statements.sql -o /opt/app/test/output.json
-        #run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
-
-  # build:
+  # container-test-job:
   #   runs-on: ubuntu-latest
+  #   container:
+  #     image: confluentinc/ksqldb-cli:0.24.0
+  #     env:
+  #       KSQL_CONFIG_DIR: "/etc/ksqldb"
+  #       entrypoint: /bin/sh
+  #     ports:
+  #       - 80
+  #     volumes:
+  #       - /github/workspace/src:/opt/app/src
+  #       - /github/workspace/test:/opt/app/test
+  #     options: --cpus 1
   #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: franzbischoff/replace_envs@v1
-  #       env:
-  #         CONFLUENT_KSQLDB_ENDPOINT: 'https://pksqlc-jzzqw.westeurope.azure.confluent.cloud:443'
-  #         CONFLUENT_KSQLDB_API_KEY: 'O3B4JABWUZWJ3CXC'
-  #         CONFLUENT_KSQLDB_API_SECRET: 'ABWo8ulbxTXKyL0Pq/J6u/552v9SmeTZpnAoBLoMhTktRBWzqGEfVEmJhlydepP2'
-  #       with:
-  #         from_file: 'ksql-migrations.properties'
-  #         to_file: 'ksql-migrations.properties'
-  #         commit: 'false'
-  #     - uses: ./.github/actions/ksqldb-migrations-validate
-  #     - uses: ./.github/actions/ksqldb-migrations-apply
+  #     - name: Check for dockerenv file
+  #       run: ls -R
+  #       #run: ksql-test-runner -i /opt/app/test/input.json -s /opt/app/src/statements.sql -o /opt/app/test/output.json
+  #       #run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: franzbischoff/replace_envs@v1
+        env:
+          CONFLUENT_KSQLDB_ENDPOINT: 'https://pksqlc-jzzqw.westeurope.azure.confluent.cloud:443'
+          CONFLUENT_KSQLDB_API_KEY: 'O3B4JABWUZWJ3CXC'
+          CONFLUENT_KSQLDB_API_SECRET: 'ABWo8ulbxTXKyL0Pq/J6u/552v9SmeTZpnAoBLoMhTktRBWzqGEfVEmJhlydepP2'
+        with:
+          from_file: 'ksql-migrations.properties'
+          to_file: 'ksql-migrations.properties'
+          commit: 'false'
+      - uses: ./.github/actions/ksqldb-test-cases
+      #- uses: ./.github/actions/ksqldb-migrations-validate
+      #- uses: ./.github/actions/ksqldb-migrations-apply
