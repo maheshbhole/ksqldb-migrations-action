@@ -4,6 +4,9 @@ inputs:
   config:
     description: Path to config file
     default: /github/workspace
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'    
 runs:
   using: docker
   image: docker://confluentinc/ksqldb-cli:0.24.0
@@ -15,7 +18,9 @@ runs:
     - ${{ inputs.config }}/src/statements.sql
     - -o
     - ${{ inputs.config }}/test/output.json
-    - -| grep ">>> Test passed!"
+    - |
+    - grep ">>> Test passed!"
+
 # name: ksqlDB Testcases
 # description: validate ksqlDB testcases with GitHub actions
 # inputs:
