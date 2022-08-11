@@ -14,8 +14,8 @@ runs:
     - -s
     - ${{ inputs.config }}/src/statements.sql
     - -o
-    - ${{ inputs.config }}/test/output.json | grep ">>> Test passed!"
-
+    - ${{ inputs.config }}/test/output.json
+    - -| grep ">>> Test passed!"
 # name: ksqlDB Testcases
 # description: validate ksqlDB testcases with GitHub actions
 # inputs:
