@@ -33,10 +33,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: maheshbhole
+      # - uses: trstringer/manual-approval@v1
+      #   with:
+      #     secret: ${{ github.TOKEN }}
+      #     approvers: maheshbhole
       - uses: actions/checkout@v2
       - uses: franzbischoff/replace_envs@v1
         env:
